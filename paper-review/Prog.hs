@@ -18,6 +18,74 @@ module Prog where
 import Control.Monad(ap, liftM2)
 import Prelude hiding (fail)
 
+{- Outline
+
+First part: provide background on the effect handlers approach:
+
+  - Section 2: Handling backtracking computations
+  - Section 3: Prepare the ground for more modular syntax by using datatypes a la carte.
+  - Section 4: Show how state can be added to nondeterministic computation.
+  - Section 5: Show how handlers can span different syntax signatures
+
+Second part: scoped effects
+
+  - Section 6:  builds grammars to parse input, and shows how using handlers to create local scopes imposes undesired semantics.
+  - Section 7: fix the problem by using syntax to delimit the scope.
+  - Section 8: demonstrate expection handling as another example that requires scoped effects
+  - Section 9: resolves section 8
+  - Section 10: improve solution proposed on section 9. High-order syntax is introduced.
+  - Section 11: example where our first-order approach fails, but that can be solved with higher-order syntax.
+  - Section 12: related work
+-}
+
+-------------------------------------------------------------
+-- 0. Abstract
+-------------------------------------------------------------
+
+{-
+Algebraic effect handlers: powerful means for describing
+effectful computations.
+
+They provide a lightweight and orthogonal technique to define
+and compose the syntax and semantics of different effects.
+
+The semantic is captured by handlers, which are functions that
+transform synta trees.
+
+Algebraic effect handlers do not support syntax for scoping constructs
+which arises in many scenarios:
+
+  * cut on backtracking
+  * catch in exceptions
+  * context in threading
+
+This paper presents two approaches to capture scoped constructs
+in the syntax, and show how to achieve different semantics
+by reordering handlers.
+
+   * Using existing algebraic handlers frameworks
+   * Higher-order syntax
+-}
+
+-------------------------------------------------------------
+-- 1. Introduction
+-------------------------------------------------------------
+
+{-
+
+Two approaches to capture scoped constructs in syntax and achieve different semantics:
+
+- Express scopes using the existing algebraic handlers frameworks.
+- high-order syntax
+
+Effect handlers: lightweight and compositional means of describing effectful computations.
+
+Using handlers for scoping has an important limitation. The semantics of handlers is orthogonal i.e. depends on the order of application (e.g. state and non-determinism).
+
+Paper shifts the responsibility of creating scopes from handlers to syntax. This allow safely reorder handlers to control the interaction semantics while scoping is unaffected.
+
+-}
+
 -------------------------------------------------------------
 -- 2. Backtracking Computation
 -------------------------------------------------------------
@@ -234,11 +302,10 @@ knapsack w vs
 -- 5. Cut and Call
 -------------------------------------------------------------
 
--- Handlers don't need to be orthogocal.
+-- Handlers don't need to be orthogonal.
 -- We can extends nondeterminism with a non-orthogonal feature.
 
-data Cut cnt = Cutfail'
-  deriving Functor
+data Cut cnt = Cutfail' deriving Functor
 pattern Cutfail <- (project -> Just Cutfail')
 cutfail :: (Cut ⊂ sig) => Prog sig a
 cutfail = inject Cutfail'
@@ -277,6 +344,8 @@ once p = call (do x <- p; cut; return x)
 -------------------------------------------------------------
 
 -- Central problem of the paper.
+--
+-- Using handlers to create local scopes imposes undesired semantics.
 
 -- A handler like `call` is called a **scoping handler**, because it not only
 -- provides the semantics for particular syntax, but also creates a local scope
@@ -368,6 +437,14 @@ expr2 = do
           <||> do return i)
 
 {-
+
+expr2 :: (Nondet ⊂ sig, Symbol ⊂ sig) => Prog sig Int
+expr2 = do
+  i <- term
+  symbol '+'
+  call (do cut; j <- expr2; return (i + j)
+          <||> do return i)
+
 The problem is taht we have chosen the wrong order for the parse and call handlers,
   which leads to the undesired interaction.
 The appropiate interaction is obtained by first applying parse and the call handlers.
