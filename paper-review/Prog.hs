@@ -468,11 +468,11 @@ upcast (Op op) = Op (Inr (fmap upcast op))
 
 -- syntax
 data Exc e cnt
-    = Throwy' e
+    = Throw' e
   deriving (Functor)
-pattern Throwy e <- (project -> Just (Throwy' e))
+pattern Throw e <- (project -> Just (Throw' e))
 throw :: (Exc e ⊂ sig) => e -> Prog sig a
-throw e = inject (Throwy' e)
+throw e = inject (Throw' e)
 
 -- handler
 runExc
@@ -480,7 +480,7 @@ runExc
   => Prog (Exc e + sig) a
   -> Prog sig (Either e a)
 runExc (Return x) = return (Right x)
-runExc (Throwy e) = return (Left e)
+runExc (Throw e) = return (Left e)
 runExc (Other op) = Op (fmap runExc op)
 
 catch
@@ -489,7 +489,7 @@ catch
   -> (e -> Prog sig a)
   -> Prog sig a
 catch (Return x) h = return x
-catch (Throwy e) h = h e
+catch (Throw e) h = h e
 catch (Op op) h = Op (fmap (\p -> catch p h) op)
 
 -- Same problem as our initial version of call:
@@ -600,14 +600,14 @@ tripleDecr' = decr >> catch' (decr >> decr) return
 -- Local
 --
 -- >>> tripleDecrExample'
--- Right (1, ())
+-- Right (1,())
 tripleDecrExample' :: Either () (Int, ())
 tripleDecrExample' = run . runCatch . runState 2 $ tripleDecr'
 
 -- Global
 --
 -- >>> tripleDecrExample''
--- (0, Right ())
+-- (0,Right ())
 tripleDecrExample'' :: (Int, Either () ())
 tripleDecrExample'' = run . runState 2 . runCatch $ tripleDecr'
 
