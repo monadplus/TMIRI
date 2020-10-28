@@ -4,28 +4,28 @@
 \input{preamble}
 
 \newcommand{\myhline}[0]{\par\noindent\rule{\textwidth}{0.4pt}\\}
-
+  
 \newenvironment{lined}
     {
-    \par\noindent\rule{\textwidth}{0.4pt}
+    \myhline
     }
     {
     \vspace{-4ex}
-    \par\noindent\rule{\textwidth}{0.4pt}
+    \myhline
     }
 
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{}
-\rhead{TODO}
-\lhead{TODO}
+\rhead{Effect Handlers in Scope}
+\lhead{TMIRI - Peer Reviewing}
 \rfoot{Page \thepage}
 
 \title{%
   \vspace{-10ex}
   Peer Reviewing \\
   \small{TMIRI Assignment}
-  \vspace{-10ex}
+  \vspace{-15ex}
 }
 \date{} % no date
 
@@ -42,74 +42,98 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-{\normalsize \textbf{Summary:}}
+{\normalsize \textbf{Summary:}}\label{sec:summary}
 % Problem addressed
 % How this work contributes to solve it
-\quad
 
-Algebraic effect handlers are powerful means for describing effectful computations.
+Algebraic effect handlers are powerful means for describing effectful computations. They provide an elegant technique to define and compose the syntax and semantics of different effects. The semantic is given by handlers, which are functions that transform syntax trees. The core idea of algebraic effect handlers is that programs are composed by orthogonal pieces of syntax that can be given semantics later by handlers. Applying handlers in different order result in different interaction between effects. This flexibility is important to get the right semantics for our programs.
+
+One facet of effectful computation that has not received much attention is \textit{scoping constructs}. Scoping arises in many different scenarios such as control flow, pruning nondeterministic computations and multi-threading. Existing effect handlers frameworks provide scoping by means of handlers. Unfortunately, this approach does imposes a lot of restrictions on the semantics. And the crucial ability of reordering of handlers to provide different semantics is incompatible with providing the right scope. This is proven by a \mbox{counterexample} in the paper.
+
+The authors propose the novel idea of shifting the responsibility of creating scopes from handlers to syntax. They propose two different approaches for handling scoping through the syntax:
+
+\begin{enumerate}[label=(\alph*)]
+    \item Incorporating \textit{markers} to the syntax of existing effect handlers frameworks.
+    \item \textit{Higher-order syntax} to truly incorporate scoping to embeded programs
+\end{enumerate}
+
+The paper is divided in two parts. The first part provides background on the effect handlers approach by given an introductory example on backtracking computations, showing an implementation using \textit{datatypes \`a la carte}, an example of threading orthogonal effects and how to incorporate scoping to the handlers. The second part focus on the scoping problem and provides the two solutions, one based on markers and the other based on higher-order syntax.
+
+The author concludes by comparing the two approaches and raises the open question on how to implement higher-order syntax on top of delimited continuations and suggest future work on a possible implementation of a framework to generically lift first-order handlers to the higher-order setting (lifting syntax is already solved in the paper).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\myhline
+\vspace{2ex}
 {\normalsize \textbf{Originality:}}
 % How original is the work ?
 % Why the paper contains new stuff
-\quad
+
+The authors provide an exhaustive survey of related work on the field on the last section of the paper.
+This survey includes the study of algebraic effects from a \textit{categorical} point of view by Plotkin and Power [11], [12] and [4], the implementation of these ideas in the programming languages \textit{Eff} and \textit{Frank} and several libraries that implement this ideas in existing programming languages such as \textit{Idris, Haskell, OCaml} and \textit{Racket}.
+
+According to the author, scoping constructs have not received much attention on related work and provides a couple of examples on why the current approach on scoping through the handlers does not work as expected. The authors proposed two novel techniques to solve the scoping problem via syntax.
+
+More recent work on higher-order syntax like \cite{mpc2015} suggest that this paper was indeed novel at its time.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\myhline
-{\normalsize \textbf{Significance:}}
+\vspace{2ex}
+{\normalsize \textbf{Significance\textbackslash Relevance\textbackslash Suitability:}}
 % Who will care and how much about the paper in that venue
-\quad
+
+This paper is mostly relevant to computer scientist interested in functional programming languages. This field had been previously studied by mathematicians with a strong interest in applied category theory but this paper lacks all the underlying mathematics that is usually found in related work. Therefore, applied category theory mathematicians would not find it suitable.
+
+The study is relevant to the design of functional programming languages. Incorporating scoping constructs to the semantics of a programming is needed in many situations as I mentioned in the summary.
+
+\textit{ICFP'14: ACM SIGPLAN International Conference on Functional Programming} seeks contributions on the design, implementations, principles, and uses of functional programming, covering the entire spectrum of work, from practice to theory, including its peripheries. And so, the paper is suitable for the conference.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\myhline
+\vspace{2ex}
 {\normalsize \textbf{Validity:}}
 % How well the paper applies the scientific method, how well the experiments support the claim
 % Hhow good is the logic that links the experiments to the conclusion
-\quad
+
+The authors use an empirical approach to deal with effect handlers which makes the content of the paper more approachable for people who are not into category theory and algebraic theory but lacks the robustness of a mathematical framework which was present in related work [11], [12] and [4].
+
+The authors show with a counterexample why scoping through handlers does not compose well with reordering of semantics. It is easy to see the problem on that specific example but hard to understand the inherit problem of scoping through handlers. From my point of view, authors should have elaborated a bit more on that as it is crucial to understand the motivation for markers and higher-order syntax.
+
+The presentation of the paper is in general good. The introduction to the background of effect handlers is appreciaed by the computer scientist public and the development of the ideas is excellent, starting from first-order handlers to sophisticated higher-order syntax. One of the nicest part of the paper, is that the ideas are developed at the same time as the encoding in \textit{Haskell} is presented which makes those abstract ideas easy to understand. My only critique on the code is that there is not a single mention, except for the keywords section, that the code is written in haskell and the authors do not provide a repository with the complete source code. For curiosity, I made the effort to reproduce their encoding of higher-order syntax, an except for the typical nuisances with Hindley-Milner type inference of implicit type parameters, the rest of the code does type check on \textit{GHC 8.8.4}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\myhline
+\vspace{2ex}
 {\normalsize \textbf{References:}}
+
 % Are they from reputable sources?
-\quad
+The references are from reputable sources in the category of functional programming. Such references are from prestigious conferences like \textit{ICFP} and \textit{POPL}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\myhline
-{\normalsize \textbf{Suitability:}}
-% Suitability for the conference
-\quad
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\myhline
+\vspace{2ex}
 {\normalsize \textbf{Recommendation:}}
 % Suitability for the conference
-\quad
+
+My recommendation for the paper is acceptance. Despite the lack of a rigorous mathematical analysis of the solution proposed, the paper is still a high-quality work and novel approach to scoping in effect handlers.
+
+At 2020, frameworks have shifted from first-order syntax to higher-order syntax. The most novel frameworks like \cite{fused-effects} and \cite{polysemy} are based on the ideas presented on this paper.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\myhline
+\vspace{2ex}
 {\normalsize \textbf{Level of confidence:}}
 % Suitability for the conference
-\quad
+Although having over two years of experience in functional programming, my academic experience on the topic is very limited and I have not read any of the referenced papers. However, I fully understood its content, the inherit problem and how the solutions proposed solve the problem. So, my confidence level is medium.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% \bibliographystyle{unsrt}
-% \bibliography{refs}
+\bibliographystyle{unsrt}
+\bibliography{refs}
 \end{document}
