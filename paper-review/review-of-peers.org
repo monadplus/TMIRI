@@ -1,0 +1,34 @@
+* 47942638
+
+Mark: 7/10
+
+The summary is a good rewriting of the abstract of the paper.
+I would have expected more information about its content such as the novel technique used, the experiment run, and the comparisons against the other two classical techniques.
+
+I am missing an statement about the originality, it is no clear if the work is original or not. It requires some interpretation of the last paragraph to deduce it.
+
+The validity section is a bit poor. I am missing a critique evaluation of the models used and the results.
+There is no comment about the structure of the paper and the presentation of the data. Statements like
+
+"The indicators that the authors propose for the models are based on the
+notion of spatio-temporal neighborhood, which is a very interesting idea de-
+veloped by theoretical physicists that has given great results"
+
+in my opinion, requires a citation.
+
+In conclusion, the review is decent, with nice vocabulary and presentation. But, from my point of view, it is not properly analyzing the work presented. I would suggest a more exhaustive analysis on the models proposed and the results of the experiment.
+
+* 48084675
+
+Mark: 8/10
+
+As in the previous, the summary lacks an outline of the paper.
+It is just a rewriting of the abstract and the conclusions.
+
+The reviewer, who said not to be an expert on the topic, claims that the current method for sharing clinical trial data have plenty of disadvantages. I would suggest, at least, adding a reference on a survey on that topic.
+
+The validity section is better than the previous one. The reviewer has shared his/her concern on the main topic of the paper, the privacity, that seems not to be properly justified.
+
+The clarity section is good.
+
+The recommendation is fair with respect to the level of confidence and the review.
