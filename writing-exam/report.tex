@@ -1,0 +1,72 @@
+
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble}
+
+\newcommand{\myhline}[0]{\par\noindent\rule{\textwidth}{0.4pt}\\}
+  
+\newenvironment{lined}
+    {
+    \myhline
+    }
+    {
+    \vspace{-4ex}
+    \myhline
+    }
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{}
+\lhead{TMIRI - Writing Test}
+\rfoot{Page \thepage}
+
+\title{%
+  TMIRI: \Large{Writing Test}\\
+}
+\author{Arnau Abella}
+\date{\today} % no date
+
+\begin{document}
+\maketitle
+% \tableofcontents
+
+\begin{enumerate}
+  \item
+    \begin{enumerate}
+      \item Given $\vec{v} = (v_{1}, v_{2}, \ldots, v_{n}), \vec{w} = (w_{1}, w_{2}, \ldots, w_{n})$ and $\forall_{\substack{1 \leq i \leq n - 1\\1 \leq j \leq n}} \ v_i \neq w_i$. We define a new vector $\vec{u} = (u_{1}, u_{2}, \ldots, u_{2n})$ such that
+        \[
+           u_{i} = \begin{cases}
+                 (u_{i}\in \vec{v}) \ \lor (u_{i}\in \vec{w})  & \forall_{1 \leq i \leq 2n }\\
+                 u_{i}\leq u_{i+1} & \forall_{1 \leq i \leq 2n-1 }
+              \end{cases}
+       \]
+
+      \item Given a set of integers $A$, we define the set $S$ that contains the sum of all pairs as
+
+        \begin{equation*}
+          S \coloneqq \{c = a + b \ | \ a \in A, b \in B, \text{ and } a \neq b\}
+        \end{equation*}
+
+      \item Given the squared matrices $A_{n,n}$, $B_{n,n}$, and $C_{n,n}$. We define the \mbox{\textit{maxmin-mean}} as the matrix $D$ of dimension $n \times n$ where $d_{ij}$ denotes the element in row $i$ and column $j$ such that
+        \begin{equation*}
+        D_{n,n} =
+        \begin{pmatrix}
+        d_{1,1} & d_{1,2} & \cdots & d_{1,n} \\
+        d_{2,1} & d_{2,2} & \cdots & d_{2,n} \\
+        \vdots  & \vdots  & \ddots & \vdots  \\
+        d_{n,1} & d_{n,2} & \cdots & d_{n,n}
+        \end{pmatrix}_{\in \mathbb{R}^{n \times n}}
+        \end{equation*} where $d_{ij} = \frac{max(a_{ij}, b_{ij}, c_{ij}) + min(a_{ij}, b_{ij}, c_{ij})}{2}$
+  \end{enumerate}
+  \newpage
+  \item Given $3$ empty stacks of cards and $n$ cards, where each card is numbered from $1$ to $n$. Each card is \textit{u.a.r} placed in one of the three stacks of cards in \textit{descending order}.
+
+    The player can only make one move at a time. Each move consist of picking one of the stacks, taking the top card of the stack and moving it to the top of another stack. The move is only valid if no large card is placed on top of a smaller one.
+
+    The goal is to place all the cards on a single stack.
+\end{enumerate}
+
+\bibliographystyle{unsrt}
+\bibliography{refs}
+\end{document}
