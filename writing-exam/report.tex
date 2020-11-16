@@ -4,15 +4,6 @@
 \input{preamble}
 
 \newcommand{\myhline}[0]{\par\noindent\rule{\textwidth}{0.4pt}\\}
-  
-\newenvironment{lined}
-    {
-    \myhline
-    }
-    {
-    \vspace{-4ex}
-    \myhline
-    }
 
 \usepackage{fancyhdr}
 \pagestyle{fancy}
@@ -25,11 +16,10 @@
   TMIRI: \Large{Writing Test}\\
 }
 \author{Arnau Abella}
-\date{\today} % no date
+\date{\today}
 
 \begin{document}
 \maketitle
-% \tableofcontents
 
 \begin{enumerate}
   \item
@@ -67,6 +57,4 @@
     The goal is to place all the cards on a single stack.
 \end{enumerate}
 
-\bibliographystyle{unsrt}
-\bibliography{refs}
 \end{document}
