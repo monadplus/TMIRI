@@ -13,7 +13,6 @@ report.pdf: $(wildcard *.tex) $(wildcard *.bib)
 	pdflatex -halt-on-error -shell-escape $(TARGET)
 
 slides.pdf: $(wildcard *.tex)
-	- pdflatex -halt-on-error -shell-escape slides.tex
 	pdflatex -halt-on-error -shell-escape slides.tex
 
 clean:

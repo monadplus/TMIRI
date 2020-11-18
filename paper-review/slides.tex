@@ -10,8 +10,18 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage{minted}
+\usepackage[percent]{overpic}
+
+\usepackage{tikz}
+% \def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}
 
 \graphicspath{ {./images/} }
+
+\def\checkmark{\includegraphics[height=0.5cm]{checkmark.png}}
+\def\crossmark{\includegraphics[height=0.5cm]{crossmark.png}}
+\def\questionmark{\includegraphics[height=0.5cm]{question_mark.png}}
+
+\definecolor{bgConsole}{HTML}{ffffcc}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -45,96 +55,222 @@
 
 \begin{document}
 
-\defverbatim[colored]\mycode{%
-  \begin{minted}[fontsize=\footnotesize]{haskell}
-data Backtr a
-  = BReturn a -- Success
-  | BFail -- Failure
-  | Backtr a :<> Backtr a -- Choice
-  deriving (Read, Show, Functor)
-
-instance Functor Backtr => Applicative Backtr where
-  pure = BReturn
-  (<*>) = ap
-
-instance Applicative Backtr => Monad Backtr where
-  return :: a -> Backtr a
-  return = pure
-
-  (>>=) :: Backtr a -> (a -> Backtr b) -> Backtr b
-  BReturn a >>= r = r a
-  BFail >>= _ = BFail
-  (p :<> q) >>= r = (p >>= r) :<> (q >>= r)
-  \end{minted}                      
-}
-
 \frame{\titlepage}
 
-\section{Test section one}
 \begin{frame}
-  \frametitle{Foo}
-  % {\color{Red!100} A B C}
-  %
   \begin{columns}[c]
-    \column{1.5in}
-    This is a line\\ \pause
-    This is a line
+    \column{0.4\textwidth}
+    \begin{center}
+      \Large{\textcolor{RoyalBlue}{Monad Transformers}}\\
+      \small{Traditional Approach \\
+      (Liang et al. 1995)}
+    \end{center}
 
-    \column{1.5in}
-    \framebox{\includegraphics[width=1.5in]{cat.jpg}}
+    \column{0.4\textwidth}
+    \begin{center}
+      \Large{\textcolor{ForestGreen}{Algebraic Effect Handlers}}\\
+      \small{Recent Developments} \\
+      \small{(Plotkin\&Power 2002, \\
+      Kiselyov et al. 2013, \\
+      Kammar et al. 2013, \\
+      Brady 2013)}
+    \end{center}
   \end{columns}
 \end{frame}
 
-\section{Test section two}
-
-% \begin{frame}\frametitle{Tic-Tac-Toe via {\tt tabular}}\setbeamercovered{invisible}{\Huge\begin{center}\begin{tabular}{c|c|c}\onslide<9->{O}  & \onslide<8->{X} & \onslide<2->{X} \\ \hline\onslide<6->{X}  & \onslide<3->{O} & \onslide<5->{O} \\ \hline\onslide<10->{X} & \onslide<7->{O} & \onslide<4->{X}\end{tabular}\end{center}}\end{frame}
-
-\begin{frame}[t] % vertical flushing
-  \frametitle{Third slide}
-  \framesubtitle{This is a subtitle}
-  \begin{theorem}
-    This is a theorem
-  \end{theorem}
-  \begin{proof}
-    Very interesting proof
-  \end{proof}
+\begin{frame}
+  \begin{columns}[c]
+    \column{0.3\textwidth}
+    \begin{center}
+      \Large{\textcolor{RoyalBlue}{Monad Transformers}}
+    \end{center}
+    \column{0.3\textwidth}
+    \column{0.3\textwidth}
+    \begin{center}
+      \Large{\textcolor{ForestGreen}{Algebraic Effect Handlers}}
+    \end{center}
+  \end{columns}
+  \bigskip
+  \begin{columns}[c]
+    \column{0.3\textwidth}
+    \begin{center}
+      \crossmark
+    \end{center}
+    \column{0.3\textwidth}
+    \begin{center}
+      \textbf{Methodology}
+    \end{center}
+    \column{0.3\textwidth}
+    \begin{center}
+      \checkmark
+    \end{center}
+  \end{columns}
+  \begin{columns}[c]
+    \column{0.3\textwidth}
+    \begin{center}
+      \crossmark
+    \end{center}
+    \column{0.3\textwidth}
+    \begin{center}
+      \textbf{Composition}
+    \end{center}
+    \column{0.3\textwidth}
+    \begin{center}
+      \checkmark
+    \end{center}
+  \end{columns}
 \end{frame}
 
-\begin{frame}{Title}
-  \begin{block}{Question}
-    How many cats ?
-  \end{block}
-  \begin{block}{Answer}
-    Two
-  \end{block}
-  \begin{block}{enum me}
-    \begin{enumerate}
-        \item<1-> This is a
-        \item<2-> theorem
-    \end{enumerate}
-  \end{block}
+\begin{frame}
+  \begin{columns}[c]
+    \column{0.3\textwidth}
+    \begin{center}
+      \Large{\textcolor{RoyalBlue}{Monad Transformers}}
+    \end{center}
+    \column{0.3\textwidth}
+    \column{0.3\textwidth}
+    \begin{center}
+      \Large{\textcolor{ForestGreen}{Algebraic Effect Handlers}}
+    \end{center}
+  \end{columns}
+  \bigskip
+  \bigskip
+  \begin{columns}[c]
+    \column{0.3\textwidth}
+    \begin{center}
+      \questionmark
+    \end{center}
+    \column{0.3\textwidth}
+    \begin{center}
+      \textbf{Effect Interaction}
+    \end{center}
+    \column{0.3\textwidth}
+    \begin{center}
+      \questionmark
+    \end{center}
+  \end{columns}
 \end{frame}
 
-\section{Third section}
+{
+\setbeamercolor{frametitle}{fg=white, bg=RoyalBlue}
+\begin{frame}[fragile, t]
+  \frametitle{Monad Transformers}
+  \begin{center}
+    \textbf{\Large{Effect Interaction?}}
+  \end{center}
+  \begin{minted}[bgcolor=bg, fontsize=\footnotesize]{haskell}
+decr :: (MonadState Int m, MonadExcept () m)
+     => m ()
+decr = do x <- get
+          if x > 0 then put (pred x)
+                   else throw ()
+  \end{minted}
+  \pause
+  \begin{minted}[bgcolor=bgConsole, fontsize=\footnotesize]{haskell}
+ghci> (runId . runStateT 0 . runExceptT) decr
+(Left (), 0)
+  \end{minted}
+  \pause
+  \begin{minted}[bgcolor=bgConsole, fontsize=\footnotesize]{haskell}
+ghci> (runId . runExceptT . runStateT 0) decr
+Left ()
+  \end{minted}
+\end{frame}
+}
 
-\begin{frame}{Title}
-  \begin{block}{Question}
-    Is every even number the sum of two primes?
-    \cite{Goldbach1742}
-  \end{block}
+\begin{frame}
+  \begin{columns}[c]
+    \column{0.3\textwidth}
+    \begin{center}
+      \Large{\textcolor{RoyalBlue}{Monad Transformers}}
+    \end{center}
+    \column{0.3\textwidth}
+    \column{0.3\textwidth}
+    \begin{center}
+      \Large{\textcolor{ForestGreen}{Algebraic Effect Handlers}}
+    \end{center}
+  \end{columns}
+  \bigskip
+  \bigskip
+  \begin{columns}[c]
+    \column{0.3\textwidth}
+    \begin{center}
+      \checkmark
+    \end{center}
+    \column{0.3\textwidth}
+    \begin{center}
+      \textbf{Effect Interaction}
+    \end{center}
+    \column{0.3\textwidth}
+    \begin{center}
+      \questionmark
+    \end{center}
+  \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]
-  \frametitle{An algorithm for finding prime numbers.}
-  \mycode
+{
+\setbeamercolor{frametitle}{fg=white, bg=ForestGreen}
+\begin{frame}[fragile, t]
+  \frametitle{Algebraic Effect Handlers}
+  \begin{center}
+    \textbf{\Large{Effect Interaction?}}
+  \end{center}
+  \begin{minted}[bgcolor=bg, fontsize=\footnotesize]{haskell}
+decr :: (State Int <: sig, Exc () <: sig)
+     => Prog sig ()
+decr = do x <- get
+          if x > 0 then put (pred x)
+                    else throw ()
+  \end{minted}
+  \pause
+  \begin{minted}[bgcolor=bgConsole, fontsize=\footnotesize]{haskell}
+ghci> (run . runState 0 . runErr) decr
+(Left (), 0)
+  \end{minted}
+  \pause
+  \begin{minted}[bgcolor=bgConsole, fontsize=\footnotesize]{haskell}
+ghci> (run . runErr . runState 0) decr
+Left ()
+  \end{minted}
+\end{frame}
+}
+
+\begin{frame}
+  \begin{columns}[c]
+    \column{0.3\textwidth}
+    \begin{center}
+      \Large{\textcolor{RoyalBlue}{Monad Transformers}}
+    \end{center}
+    \column{0.3\textwidth}
+    \column{0.3\textwidth}
+    \begin{center}
+      \Large{\textcolor{ForestGreen}{Algebraic Effect Handlers}}
+    \end{center}
+  \end{columns}
+  \bigskip
+  \bigskip
+  \begin{columns}[c]
+    \column{0.3\textwidth}
+    \begin{center}
+      \checkmark
+    \end{center}
+    \column{0.3\textwidth}
+    \begin{center}
+      \textbf{Effect Interaction}
+    \end{center}
+    \column{0.3\textwidth}
+    \begin{center}
+      \checkmark
+    \end{center}
+  \end{columns}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%
 
 \begin{thebibliography}{5}
-  \bibitem{Goldbach1742}[Goldbach, 1742]
-  Christian Goldbach.
-  \newblock A problem we should try to solve
+  % \bibitem{Goldbach1742}[Goldbach, 1742]
+  % Christian Goldbach.
+  % \newblock A problem we should try to solve
 \end{thebibliography}
 
 %%%%%%%%%%%%%%%%%%%%%
