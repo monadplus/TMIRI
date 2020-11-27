@@ -1,0 +1,39 @@
+@misc{polysemy,
+    author    = "Sandy Maguire and others",
+    title     = "Polysemy: higher-order algebraic effects",
+    url       = "https://github.com/polysemy-research/polysemy"
+}
+
+@misc{fused-effects,
+    author    = "Rob Rix and Patrick Thomson and others",
+    title     = "fused-effects: a fast effect system for haskell",
+    url       = "https://github.com/fused-effects/fused-effects"
+}
+@inproceedings{mpc2015,
+  title = {Fusion for Free: Efficient Algebraic Effect Handlers},
+  author = {Nicolas Wu and Tom Schrijvers},
+  year = {2015},
+  booktitle = {MPC 2015},
+  url = {/Research/papers/mpc2015.pdf},
+  abstract = {Algebraic effect handlers are a recently popular approach for
+modelling side-effects that separates the syntax and semantics of
+effectful operations. The shape of syntax is captured by functors, and
+free monads over these functors denote syntax trees. The semantics is
+captured by algebras, and effect handlers pass these over the syntax
+trees to interpret them into a semantic domain.
+
+This approach is inherently modular: different functors can be
+composed to make trees with richer structure. Such trees are
+interpreted by applying several handlers in sequence, each removing
+the syntactic constructs it recognizes. Unfortunately, the
+construction and traversal of intermediate trees is painfully
+inefficient and has hindered the adoption of the handler approach.
+
+This paper explains how a sequence of handlers can be fused into one, so that
+multiple tree traversals can be reduced to a single one and no intermediate
+trees need to be allocated. At the heart of this optimization is keeping the
+notion of a free monad abstract, thus enabling a change of representation that
+opens up the possibility of fusion. We demonstrate how the ensuing code can be
+inlined at compile time to produce efficient handlers.
+},
+}
